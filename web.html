@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartHub Computers</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;400;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #0A0A0A;
+      color: #FFFFFF;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 1px;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #1A1A1A;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #00FF41;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00A2FF;
+    }
+
+    /* Header Styles */
+    header {
+      background-color: #0A0A0A;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #00FF41;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #00FF41;
+      text-shadow: 0 0 10px rgba(0, 255, 65, 0.7);
+      cursor: pointer;
+    }
+
+    .logo span {
+      color: #00A2FF;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-link {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: #00FF41;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: #00A2FF;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .icons {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .icon {
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .icon:hover {
+      color: #00A2FF;
+      transform: scale(1.1);
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background-color: #00FF41;
+      color: #0A0A0A;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .mobile-menu-button {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .logout-button {
+      background-color: #FF0033;
+      color: #FFFFFF;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-family: 'Orbitron', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .logout-button:hover {
+      background-color: #00A2FF;
+    }
+
+    /* Product Card Styles */
+    .card {
+      background-color: #1A1A1A;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      border: 1px solid #2A2A2A;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 255, 65, 0.1);
+      border-color: #00FF41;
+    }
+
+    .product-image {
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: #00FF41;
+      color: #0A0A0A;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .bulk-badge {
+      position: absolute;
+      background-color: #00A2FF;
+      top: auto;
+      bottom: 10px;
+      left: 10px;
+      color: #0A0A0A;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .admin-controls {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .admin-button {
+      background-color: #1A1A1A;
+      color: #FFFFFF;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .admin-button:hover {
+      background-color: #00A2FF;
+      color: #0A0A0A;
+    }
+
+    .admin-button:first-child:hover {
+      background-color: #FF0033;
+    }
+
+    .product-info {
+      padding: 1.5rem;
+    }
+
+    .product-name {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: #FFFFFF;
+    }
+
+    .supplier {
+      font-size: 0.9rem;
+      color: #00A2FF;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-bottom: 1rem;
+      color: #00FF41;
+    }
+
+    .price {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #00FF41;
+      margin-bottom: 1rem;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .add-to-cart {
+      background-color: #00FF41;
+      color: #0A0A0A;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .add-to-cart:hover {
+      background-color: #00A2FF;
+      transform: scale(1.05);
+    }
+
+    .view-details {
+      background-color: transparent;
+      color: #FFFFFF;
+      border: 1px solid #00A2FF;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-family: 'Orbitron', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .view-details:hover {
+      background-color: #00A2FF;
+      color: #0A0A0A;
+    }
+
+    /* Home Page Styles */
+    .home-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .hero-section {
+      background: linear-gradient(rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.9)), 
+                  url('https://via.placeholder.com/1400x500/0A0A0A/00FF41?text=SmartHub+Computers');
+      background-size: cover;
+      background-position: center;
+      height: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 3rem;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle, transparent 20%, #0A0A0A 70%);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+    }
+
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      color: #00FF41;
+      text-shadow: 0 0 15px #00FF41;
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #FFFFFF;
+    }
+
+    .contact-info {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #00A2FF;
+    }
+
+    .search-bar {
+      display: flex;
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      border-radius: 4px 0 0 4px;
+      font-size: 1rem;
+      background-color: #1A1A1A;
+      color: #FFFFFF;
+      border: 1px solid #00FF41;
+    }
+
+    .search-input:focus {
+      outline: none;
+      box-shadow: 0 0 10px #00FF41;
+    }
+
+    .search-button {
+      padding: 0 2rem;
+      background-color: #00FF41;
+      color: #0A0A0A;
+      border: none;
+      border-radius: 0 4px 4px 0;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .search-button:hover {
+      background-color: #00A2FF;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      margin: 3rem 0 1.5rem;
+      color: #00A2FF;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #00FF41, #00A2FF);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    /* Admin Panel Styles */
+    .admin-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .admin-section {
+      background-color: #1A1A1A;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      border: 1px solid #00A2FF;
+    }
+
+    .admin-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .label {
+      font-family: 'Orbitron', sans-serif;
+      color: #00FF41;
+    }
+
+    .input {
+      padding: 0.8rem;
+      background-color: #2A2A2A;
+      border: 1px solid #00A2FF;
+      border-radius: 4px;
+      color: #FFFFFF;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: #00FF41;
+      box-shadow: 0 0 10px #00FF41;
+    }
+
+    .textarea {
+      padding: 0.8rem;
+      background-color: #2A2A2A;
+      border: 1px solid #00A2FF;
+      border-radius: 4px;
+      color: #FFFFFF;
+      font-family: 'Rajdhani', sans-serif;
+      width: 100%;
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .textarea:focus {
+      outline: none;
+      border-color: #00FF41;
+      box-shadow: 0 0 10px #00FF41;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      grid-column: 1 / -1;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .submit-button {
+      background-color: #00FF41;
+      color: #0A0A0A;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 4px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      grid-column: 1 / -1;
+      max-width: 200px;
+    }
+
+    .submit-button:hover {
+      background-color: #00A2FF;
+      transform: scale(1.05);
+    }
+
+    .messages-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .message-item {
+      background-color: #2A2A2A;
+      padding: 1rem;
+      border-radius: 4px;
+      border-left: 4px solid #00A2FF;
+    }
+
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      color: #00FF41;
+    }
+
+    .message-header small {
+      color: #FFFFFF;
+      opacity: 0.7;
+    }
+
+    .message-body {
+      color: #FFFFFF;
+    }
+
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .orders-table th, .orders-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #2A2A2A;
+    }
+
+    .orders-table th {
+      background-color: #0A0A0A;
+      color: #00FF41;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .orders-table tr:hover {
+      background-color: #2A2A2A;
+    }
+
+    .approve-button {
+      background-color: #00FF41;
+      color: #0A0A0A;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .approve-button:hover {
+      background-color: #00A2FF;
+    }
+
+    /* Login Page Styles */
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 80px);
+      background-color: #0A0A0A;
+    }
+
+    .login-form {
+      background-color: #1A1A1A;
+      padding: 3rem;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 500px;
+      border: 1px solid #00FF41;
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+    }
+
+    .login-title {
+      font-family: 'Orbitron', sans-serif;
+      color: #00A2FF;
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 80px;
+        left: 0;
+        right: 0;
+        background-color: #1A1A1A;
+        padding: 2rem;
+        border-bottom: 2px solid #00A2FF;
+      }
+
+      .nav-links.mobile-open {
+        display: flex;
+      }
+
+      .mobile-menu-button {
+        display: block;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">Smart<span>Hub</span> Computers</div>
+      
+      <ul class="nav-links">
+        <li class="nav-link">Home</li>
+        <li class="nav-link">Products</li>
+        <li class="nav-link">Contact</li>
+      </ul>
+      
+      <div class="icons">
+        <div class="icon">
+          <i class="fas fa-search"></i>
+        </div>
+        <div class="icon">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="icon">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count">0</span>
+        </div>
+        <div class="mobile-menu-button">
+          <i class="fas fa-bars"></i>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="home-container">
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title">Welcome to SmartHub Computers</h1>
+        <p class="hero-subtitle">Your trusted source for computer components and accessories</p>
+        <p class="contact-info">Email us at: contact@smarthubcomputers.com</p>
+        <div class="search-bar">
+          <input type="text" class="search-input" placeholder="Search for products...">
+          <button class="search-button">Search</button>
+        </div>
+      </div>
+    </section>
+
+    <h2 class="section-title">Featured Products</h2>
+    <div class="products-grid">
+      <div class="card">
+        <div class="product-image" style="background-image: url('https://via.placeholder.com/300x200/0A0A0A/00FF41?text=Gaming+PC')">
+          <div class="badge">
+            <i class="fas fa-check-circle"></i> Verified
+          </div>
+          <div class="bulk-badge">Bulk Orders</div>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Gaming PC Pro</h3>
+          <p class="supplier">SmartHub Computers</p>
+          <div class="rating">
+            <i class="fas fa-star"></i> 4.9
+          </div>
+          <div class="price">$1299.99</div>
+          <div class="actions">
+            <button class="add-to-cart">
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+            </button>
+            <button class="view-details">Details</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="product-image" style="background-image: url('https://via.placeholder.com/300x200/0A0A0A/00A2FF?text=Keyboard')">
+          <div class="badge">
+            <i class="fas fa-check-circle"></i> Verified
+          </div>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Mechanical Keyboard</h3>
+          <p class="supplier">SmartHub Computers</p>
+          <div class="rating">
+            <i class="fas fa-star"></i> 4.7
+          </div>
+          <div class="price">$89.99</div>
+          <div class="actions">
+            <button class="add-to-cart">
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+            </button>
+            <button class="view-details">Details</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="product-image" style="background-image: url('https://via.placeholder.com/300x200/0A0A0A/00FF41?text=Monitor')">
+          <div class="badge">
+            <i class="fas fa-check-circle"></i> Verified
+          </div>
+          <div class="bulk-badge">Bulk Orders</div>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">4K Monitor</h3>
+          <p class="supplier">SmartHub Computers</p>
+          <div class="rating">
+            <i class="fas fa-star"></i> 4.8
+          </div>
+          <div class="price">$349.99</div>
+          <div class="actions">
+            <button class="add-to-cart">
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+            </button>
+            <button class="view-details">Details</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Simple mobile menu toggle functionality
+    document.querySelector('.mobile-menu-button').addEventListener('click', function() {
+      document.querySelector('.nav-links').classList.toggle('mobile-open');
+    });
+  </script>
+</body>
+</html>
